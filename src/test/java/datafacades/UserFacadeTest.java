@@ -105,8 +105,8 @@ public class UserFacadeTest {
     }
 
     @Test
-    void CantFindUserToDelete() throws NotFoundException {
-        assertThrows(NotFoundException.class, () -> facade.deleteUser("HEJSA"));
+    void CantFindUserToDelete() {
+        assertThrows(API_Exception.class, () -> facade.deleteUser("HEJSA"));
     }
 
 
