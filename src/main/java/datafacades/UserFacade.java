@@ -10,6 +10,7 @@ import errorhandling.API_Exception;
 import errorhandling.NotFoundException;
 import security.errorhandling.AuthenticationException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,7 +57,6 @@ public class UserFacade {
 
     public User createUser(User user) throws API_Exception {
         EntityManager em = getEntityManager();
-        user.addRole(new Role("user"));
         try {
             em.getTransaction().begin();
             em.persist(user);
@@ -69,7 +69,6 @@ public class UserFacade {
         }
         return user;
     }
-
 
     public User updateUser(User user) {
         EntityManager em = getEntityManager();

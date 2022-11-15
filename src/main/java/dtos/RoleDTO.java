@@ -15,7 +15,6 @@ public class RoleDTO {
         if(role.getRoleName() != null){
             this.roleName = role.getRoleName();
         }
-        role.getUserList().forEach(user -> this.userList.add(new UserDTO(user)));
     }
     public Role getEntity(){
         Role r = new Role(this.roleName);

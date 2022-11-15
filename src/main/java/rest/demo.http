@@ -9,10 +9,10 @@ Content-Type: application/json
   "userPass": "test123"
 }
 ###
-GET http://localhost:8080/api/users
+GET http://localhost:8080/api/users/user
 Content-Type: application/json
 ###
-GET http://localhost:8080/devops_starter_war_exploded/api/info/admin
+GET http://localhost:8080/api/info/admin
 x-access-token:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjoiYWRtaW4iLCJleHAiOjE2NjcyOTYyMTAsImlhdCI6MTY2NzI5NDQxMCwiaXNzdWVyIjoic2VtZXN0ZXJzdGFydGNvZGUtZGF0MyIsInVzZXJuYW1lIjoiYWRtaW4ifQ.dlsMNiQc_OYU2HCa-WMzNImQ3qoNy2CGXEWAbXBQM3g"
 
 ###
@@ -25,6 +25,6 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/api/users/mark
+DELETE http://localhost:8080/api/users/user_admin
 Content-Type: application/json
 

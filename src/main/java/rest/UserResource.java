@@ -26,8 +26,8 @@ import utils.EMF_Creator;
 @Path("users")
 public class UserResource {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private UserDTOFacade facade = UserDTOFacade.getInstance(EMF);
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
+    private static final UserDTOFacade facade = UserDTOFacade.getInstance(EMF);
 
     @GET
     @Path("{userName}")
