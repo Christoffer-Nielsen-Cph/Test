@@ -37,7 +37,7 @@ public class UserResource {
     }
 
     @GET
-    @Path("/all")
+    @Produces({MediaType.APPLICATION_JSON})
     public Response getAllUsers() throws NotFoundException {
         return Response.ok().entity(GSON.toJson(facade.getAllUsers())).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
     }
@@ -55,12 +55,13 @@ public class UserResource {
     @Path("{userName}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response update(@PathParam("userName") String userName, String content) throws EntityNotFoundException {
-        UserDTO updatedDTO = GSON.fromJson(content, UserDTO.class);
-        updatedDTO.setUserName(userName);
-        UserDTO updatedUser = facade.updateUser(updatedDTO);
-        return Response.ok().entity(GSON.toJson(updatedUser)).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
+    public Response updateUser(@PathParam("userName") String userName, String content) throws EntityNotFoundException {
+        UserDTO udto = GSON.fromJson(content, UserDTO.class);
+        udto.setUserName(userName);
+        UserDTO updated = facade.updateUser(udto);
+        return Response.ok().entity(GSON.toJson(updated)).build();
     }
+
 
     @DELETE
     @Path("{userName}")

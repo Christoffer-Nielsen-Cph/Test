@@ -69,20 +69,19 @@ public class UserFacade {
         }
         return user;
     }
+
+
     public User updateUser(User user) {
         EntityManager em = getEntityManager();
-        User updatedUser = em.find(User.class,user.getUserName());
+
         try {
             em.getTransaction().begin();
-            updatedUser.setUserName(user.getUserName());
-            updatedUser.setUserPass(user.getUserPass());
-            updatedUser.setRoleList(user.getRoleList());
-            em.merge(user);
+            User u = em.merge(user);
             em.getTransaction().commit();
+            return u;
         } finally {
             em.close();
         }
-        return updatedUser;
     }
     public User getUserByUserName(String userName) throws NotFoundException {
         EntityManager em = getEntityManager();

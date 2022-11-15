@@ -33,6 +33,24 @@ public class User implements Serializable {
     @ManyToMany
     private List<Role> roleList = new ArrayList<>();
 
+    public User() {
+    }
+
+    public User(String userName, String userPass) {
+        this.userName = userName;
+        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
+    }
+
+    /*
+    public User(UserDTO userDTO) {
+        this.userName = userDTO.getUserName();
+        this.userPass = userDTO.getUserPass();
+        this.roleList = userDTO.getRoleList();
+
+    }
+
+     */
+
     public List<String> getRolesAsStrings() {
         if (roleList.isEmpty()) {
             return null;
@@ -42,26 +60,6 @@ public class User implements Serializable {
             rolesAsStrings.add(role.getRoleName());
         });
         return rolesAsStrings;
-    }
-
-    public User() {
-    }
-
-    public User(String userName, String userPass) {
-        this.userName = userName;
-        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
-    }
-
-    public User(String userName, String userPass, List<Role> roleList) {
-        this.userName = userName;
-        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
-        this.roleList = roleList;
-    }
-
-    public User(UserDTO userDTO) {
-        this.userName = userDTO.getUserName();
-        this.userPass = userDTO.getUserPass();
-
     }
 
     public boolean verifyPassword(String pw) {

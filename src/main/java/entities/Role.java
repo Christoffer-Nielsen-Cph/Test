@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -33,6 +34,7 @@ public class Role implements Serializable {
 
     public Role(String roleName) {
         this.roleName = roleName;
+        this.userList = new ArrayList<>();
     }
 
     public String getRoleName() {
@@ -49,6 +51,13 @@ public class Role implements Serializable {
 
     public void setUserList(List<User> userList) {
         this.userList = userList;
+    }
+
+    public void addUser(User user) {
+        this.userList.add(user);
+        if(!user.getRoleList().contains(this)){
+            user.addRole(this);
+        }
     }
 
     @Override

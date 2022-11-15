@@ -11,21 +11,23 @@ public class UserDTO {
 
     private String userName;
     private String userPass;
-    private List<String> roleList = new ArrayList<>();
+    private List<RoleDTO> roleList = new ArrayList<>();
 
     public UserDTO(User user){
-        this.userName = user.getUserName();
+        if(user.getUserName() != null){
+            this.userName = user.getUserName();
+        }
         this.userPass = user.getUserPass();
-        this.roleList = user.getRolesAsStrings();
+        user.getRoleList().forEach(role -> this.roleList.add(new RoleDTO(role)));
     }
 
     public User getEntity(){
-        User user = new User();
-        if(this.userName != null){
+        User user = new User(this.userName,this.userPass);
+        if(userName != null){
             user.setUserName(this.userName);
         }
         user.setUserPass(this.userPass);
-        user.getRolesAsStrings();
+        this.roleList.forEach(role -> user.addRole(role.getEntity()));
         return user;
     }
 
@@ -51,11 +53,11 @@ public class UserDTO {
         this.userPass = userPass;
     }
 
-    public List<String> getRoleList() {
+    public List<RoleDTO> getRoleList() {
         return roleList;
     }
 
-    public void setRoleList(List<String> roleList) {
+    public void setRoleList(List<RoleDTO> roleList) {
         this.roleList = roleList;
     }
 

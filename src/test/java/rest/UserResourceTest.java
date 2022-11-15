@@ -99,20 +99,20 @@ public class UserResourceTest {
     @Test
     public void testServerIsUp() {
         System.out.println("Testing is server UP");
-        given().when().get("/users/all").then().statusCode(200);
+        given().when().get("/users").then().statusCode(200);
     }
     @Test
     public void testLogRequest() {
         System.out.println("Testing logging request details");
         given().log().all()
-                .when().get("/users/all")
+                .when().get("/users")
                 .then().statusCode(200);
     }
     @Test
     public void testLogResponse() {
         System.out.println("Testing logging response details");
         given()
-                .when().get("/users/all")
+                .when().get("/users")
                 .then().log().body().statusCode(200);
     }
 
@@ -135,7 +135,7 @@ public class UserResourceTest {
         usersDTOS = given()
                 .contentType("application/json")
                 .when()
-                .get("/users/all")
+                .get("/users")
                 .then()
                 .extract().body().jsonPath().getList("", UserDTO.class);
                  assertThat(usersDTOS,containsInAnyOrder(udto1,udto2));

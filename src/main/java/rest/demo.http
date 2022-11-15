@@ -1,7 +1,7 @@
 GET http://localhost:8080/api/info
 
 ###
-PUT http://localhost:8080/api/info/update/chris
+PUT http://localhost:8080/api/users/mark
 Content-Type: application/json
 
 {
@@ -9,22 +9,22 @@ Content-Type: application/json
   "userPass": "test123"
 }
 ###
-GET http://localhost:8080/api/users/all
+GET http://localhost:8080/api/users
 Content-Type: application/json
 ###
 GET http://localhost:8080/devops_starter_war_exploded/api/info/admin
 x-access-token:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjoiYWRtaW4iLCJleHAiOjE2NjcyOTYyMTAsImlhdCI6MTY2NzI5NDQxMCwiaXNzdWVyIjoic2VtZXN0ZXJzdGFydGNvZGUtZGF0MyIsInVzZXJuYW1lIjoiYWRtaW4ifQ.dlsMNiQc_OYU2HCa-WMzNImQ3qoNy2CGXEWAbXBQM3g"
 
 ###
-POST http://localhost:8080/api/info
+POST http://localhost:8080/api/users
 Content-Type: application/json
 
 {
-  "userName": "chris123",
+  "userName": "mark",
   "userPass": "test123"
 }
 
 ###
-DELETE http://localhost:8080/api/users/chris
+DELETE http://localhost:8080/api/users/mark
 Content-Type: application/json
 
