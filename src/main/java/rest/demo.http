@@ -25,6 +25,6 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/api/users/chris123
+DELETE http://localhost:8080/api/users/chris
 Content-Type: application/json
 
