@@ -2,6 +2,7 @@ package datafacades;
 
 import entities.Role;
 import entities.User;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
@@ -24,7 +25,6 @@ public class UserFacade {
     }
 
     /**
-     *
      * @param _emf
      * @return the instance of this facade.
      */
@@ -61,57 +61,62 @@ public class UserFacade {
             em.getTransaction().begin();
             em.persist(user);
             em.getTransaction().commit();
-        } catch (Exception e){
-            throw new API_Exception("There's already a user with the username: "+user.getUserName()+" in the system!");
-        }
-        finally {
+        } catch (Exception e) {
+            throw new API_Exception("There's already a user with the username: " + user.getUserName() + " in the system!");
+        } finally {
             em.close();
         }
         return user;
     }
-    public User updateUser(User user) {
+
+    public User updateUser(User user) throws API_Exception {
         EntityManager em = getEntityManager();
-        User updatedUser = em.find(User.class,user.getUserName());
         try {
             em.getTransaction().begin();
-            updatedUser.setUserName(user.getUserName());
-            updatedUser.setUserPass(user.getUserPass());
-            updatedUser.setRoleList(user.getRoleList());
+            User u = em.find(User.class,user.getUserName());
+            u.setUserName(user.getUserName());
+            u.setUserPass(user.getUserPass());
             em.merge(user);
             em.getTransaction().commit();
+            return u;
+        } catch (Exception e) {
+            throw new API_Exception("Can't find a user with the username: "+user.getUserName());
         } finally {
             em.close();
         }
-        return updatedUser;
     }
+
     public User getUserByUserName(String userName) throws NotFoundException {
         EntityManager em = getEntityManager();
         User u = em.find(User.class, userName);
-        if(u == null){
-            throw new NotFoundException("Can't find a user with the username: "+userName);
+        if (u == null) {
+            throw new NotFoundException("Can't find a user with the username: " + userName);
         }
         return u;
 
     }
+
     public List<User> getAllUsers() throws NotFoundException {
         EntityManager em = getEntityManager();
-        TypedQuery<User> query = em.createQuery("SELECT u FROM User u",User.class);
-        if(query == null){
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
+        if (query == null) {
             throw new NotFoundException("Can't find any users in the system");
         }
         return query.getResultList();
     }
 
-    public User deleteUser(String userName) throws NotFoundException {
+    public User deleteUser(String userName) throws API_Exception {
         EntityManager em = getEntityManager();
         User user = em.find(User.class, userName);
-        if(user == null){
-            throw new NotFoundException("Can't find a user with the username: "+userName);
-        }
-        try{
+
+        try {
             em.getTransaction().begin();
             em.remove(user);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            if (user == null) {
+                throw new API_Exception("Can't find a user with the username: " + userName);
+            }
         } finally {
             em.close();
         }

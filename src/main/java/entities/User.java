@@ -33,17 +33,6 @@ public class User implements Serializable {
     @ManyToMany
     private List<Role> roleList = new ArrayList<>();
 
-    public List<String> getRolesAsStrings() {
-        if (roleList.isEmpty()) {
-            return null;
-        }
-        List<String> rolesAsStrings = new ArrayList<>();
-        roleList.forEach((role) -> {
-            rolesAsStrings.add(role.getRoleName());
-        });
-        return rolesAsStrings;
-    }
-
     public User() {
     }
 
@@ -58,10 +47,15 @@ public class User implements Serializable {
         this.roleList = roleList;
     }
 
-    public User(UserDTO userDTO) {
-        this.userName = userDTO.getUserName();
-        this.userPass = userDTO.getUserPass();
-
+    public List<String> getRolesAsStrings() {
+        if (roleList.isEmpty()) {
+            return null;
+        }
+        List<String> rolesAsStrings = new ArrayList<>();
+        roleList.forEach((role) -> {
+            rolesAsStrings.add(role.getRoleName());
+        });
+        return rolesAsStrings;
     }
 
     public boolean verifyPassword(String pw) {

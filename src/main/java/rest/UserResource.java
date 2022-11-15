@@ -55,7 +55,7 @@ public class UserResource {
     @Path("{userName}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response update(@PathParam("userName") String userName, String content) throws EntityNotFoundException {
+    public Response update(@PathParam("userName") String userName, String content) throws EntityNotFoundException, API_Exception {
         UserDTO updatedDTO = GSON.fromJson(content, UserDTO.class);
         updatedDTO.setUserName(userName);
         UserDTO updatedUser = facade.updateUser(updatedDTO);
@@ -66,7 +66,7 @@ public class UserResource {
     @Path("{userName}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response deleteUser(@PathParam("userName") String userName) throws EntityNotFoundException, NotFoundException {
+    public Response deleteUser(@PathParam("userName") String userName) throws API_Exception {
         UserDTO deletedUser = facade.deleteUser(userName);
         return Response.ok().entity(GSON.toJson(deletedUser)).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
     }

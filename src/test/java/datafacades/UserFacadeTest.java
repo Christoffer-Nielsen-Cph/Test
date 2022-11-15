@@ -98,7 +98,7 @@ public class UserFacadeTest {
     }
 
     @Test
-    void deleteUser() throws NotFoundException {
+    void deleteUser() throws API_Exception, NotFoundException {
         facade.deleteUser("Oscar");
         int actualSize = facade.getAllUsers().size();
         assertEquals(1, actualSize);

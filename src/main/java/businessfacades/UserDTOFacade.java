@@ -1,6 +1,7 @@
 package businessfacades;
 
 import dtos.UserDTO;
+import entities.User;
 import errorhandling.API_Exception;
 import errorhandling.NotFoundException;
 import datafacades.UserFacade;
@@ -29,8 +30,9 @@ public class UserDTOFacade {
     public UserDTO createUser(UserDTO userDTO) throws API_Exception {
         return new UserDTO(userFacade.createUser(userDTO.getEntity()));
     }
-    public UserDTO updateUser(UserDTO userDTO) {
-        return new UserDTO(userFacade.updateUser(userDTO.getEntity()));
+    public UserDTO updateUser(UserDTO userDTO) throws API_Exception {
+        User u = userFacade.updateUser(userDTO.getEntity());
+        return new UserDTO(u);
     }
     public UserDTO getUserByUserName(String userName) throws NotFoundException {
         return new UserDTO(userFacade.getUserByUserName(userName));
@@ -38,7 +40,7 @@ public class UserDTOFacade {
     public List<UserDTO> getAllUsers() throws NotFoundException {
         return UserDTO.getUserDTOs(userFacade.getAllUsers());
     }
-    public UserDTO deleteUser(String userName) throws NotFoundException {
+    public UserDTO deleteUser(String userName) throws API_Exception {
         return new UserDTO(userFacade.deleteUser(userName));
     }
 }

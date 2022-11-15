@@ -44,11 +44,11 @@ public class UserDTO {
         this.userName = userName;
     }
     public String getUserPass() {
-        return userPass;
+        return userPass = BCrypt.hashpw(userName,BCrypt.gensalt());
     }
 
     public void setUserPass(String userPass) {
-        this.userPass = userPass;
+        this.userPass = BCrypt.hashpw(userName,BCrypt.gensalt());
     }
 
     public List<String> getRoleList() {
