@@ -1,0 +1,30 @@
+GET http://localhost:8080/api/info
+
+###
+PUT http://localhost:8080/api/info/update/chris
+Content-Type: application/json
+
+{
+  "userName": "ole",
+  "userPass": "test123"
+}
+###
+GET http://localhost:8080/api/users/all
+Content-Type: application/json
+###
+GET http://localhost:8080/devops_starter_war_exploded/api/info/admin
+x-access-token:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjoiYWRtaW4iLCJleHAiOjE2NjcyOTYyMTAsImlhdCI6MTY2NzI5NDQxMCwiaXNzdWVyIjoic2VtZXN0ZXJzdGFydGNvZGUtZGF0MyIsInVzZXJuYW1lIjoiYWRtaW4ifQ.dlsMNiQc_OYU2HCa-WMzNImQ3qoNy2CGXEWAbXBQM3g"
+
+###
+POST http://localhost:8080/api/info
+Content-Type: application/json
+
+{
+  "userName": "chris123",
+  "userPass": "test123"
+}
+
+###
+DELETE http://localhost:8080/api/users/chris
+Content-Type: application/json
+
