@@ -31,8 +31,7 @@ public class UserDTOFacade {
         return new UserDTO(userFacade.createUser(userDTO.getEntity()));
     }
     public UserDTO updateUser(UserDTO userDTO) throws API_Exception {
-        User u = userFacade.updateUser(userDTO.getEntity());
-        return new UserDTO(u);
+        return new UserDTO(userFacade.updateUser(userDTO.getEntity()));
     }
     public UserDTO getUserByUserName(String userName) throws NotFoundException {
         return new UserDTO(userFacade.getUserByUserName(userName));

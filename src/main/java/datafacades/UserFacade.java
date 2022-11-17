@@ -73,12 +73,13 @@ public class UserFacade {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            User u = em.find(User.class,user.getUserName());
-            u.setUserName(user.getUserName());
-            u.setUserPass(user.getUserPass());
-            em.merge(user);
+            User update = em.find(User.class,user.getUserName());
+            update.setUserName(user.getUserName());
+            update.setUserPass(user.getUserPass());
+            update.addRole(new Role("user"));
+            em.persist(update);
             em.getTransaction().commit();
-            return u;
+            return user;
         } catch (Exception e) {
             throw new API_Exception("Can't find a user with the username: "+user.getUserName());
         } finally {

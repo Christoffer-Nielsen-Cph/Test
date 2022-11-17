@@ -11,14 +11,13 @@ public class UserDTO {
 
     private String userName;
     private String userPass;
-    private List<String> roleList = new ArrayList<>();
+    private List<String> roleList;
 
     public UserDTO(User user){
         this.userName = user.getUserName();
         this.userPass = user.getUserPass();
         this.roleList = user.getRolesAsStrings();
     }
-
     public User getEntity(){
         User user = new User();
         if(this.userName != null){
@@ -28,7 +27,6 @@ public class UserDTO {
         user.getRolesAsStrings();
         return user;
     }
-
 
     public static List<UserDTO> getUserDTOs(List<User> users){
         List<UserDTO> userDTOs = new ArrayList();
@@ -44,11 +42,11 @@ public class UserDTO {
         this.userName = userName;
     }
     public String getUserPass() {
-        return userPass = BCrypt.hashpw(userName,BCrypt.gensalt());
+        return userPass;
     }
 
     public void setUserPass(String userPass) {
-        this.userPass = BCrypt.hashpw(userName,BCrypt.gensalt());
+        this.userPass = userPass;
     }
 
     public List<String> getRoleList() {

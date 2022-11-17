@@ -1,32 +1,35 @@
 package rest;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.UserDTO;
+import entities.Role;
+import entities.User;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
+import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
-import entities.*;
-import io.restassured.RestAssured;
-import static io.restassured.RestAssured.given;
-import io.restassured.parsing.Parser;
-import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
-import org.glassfish.grizzly.http.server.HttpServer;
 
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-
-import org.junit.jupiter.api.BeforeAll;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 
 public class UserResourceTest {
 
@@ -34,7 +37,7 @@ public class UserResourceTest {
     private static final String SERVER_URL = "http://localhost/api";
     private static User u1, u2;
 
-    private static UserDTO udto1,udto2;
+    private static UserDTO udto1, udto2;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
@@ -48,12 +51,9 @@ public class UserResourceTest {
 
     @BeforeAll
     public static void setUpClass() {
-        //This method must be called before you request the EntityManagerFactory
         EMF_Creator.startREST_TestWithDB();
         emf = EMF_Creator.createEntityManagerFactoryForTest();
-
         httpServer = startServer();
-        //Setup RestAssured
         RestAssured.baseURI = SERVER_URL;
         RestAssured.port = SERVER_PORT;
         RestAssured.defaultParser = Parser.JSON;
@@ -61,15 +61,9 @@ public class UserResourceTest {
 
     @AfterAll
     public static void closeTestServer() {
-        //System.in.read();
-
-        //Don't forget this, if you called its counterpart in @BeforeAll
         EMF_Creator.endREST_TestWithDB();
         httpServer.shutdownNow();
     }
-
-    // Setup the DataBase (used by the test-server and this test) in a known state BEFORE EACH TEST
-    //TODO -- Make sure to change the EntityClass used below to use YOUR OWN (renamed) Entity class
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
@@ -96,11 +90,13 @@ public class UserResourceTest {
             em.close();
         }
     }
+
     @Test
     public void testServerIsUp() {
         System.out.println("Testing is server UP");
         given().when().get("/users/all").then().statusCode(200);
     }
+
     @Test
     public void testLogRequest() {
         System.out.println("Testing logging request details");
@@ -108,6 +104,7 @@ public class UserResourceTest {
                 .when().get("/users/all")
                 .then().statusCode(200);
     }
+
     @Test
     public void testLogResponse() {
         System.out.println("Testing logging response details");
@@ -117,15 +114,15 @@ public class UserResourceTest {
     }
 
     @Test
-    public void testPrintResponse(){
-        Response response = given().when().get("/users/"+udto1.getUserName());
+    public void testPrintResponse() {
+        Response response = given().when().get("/users/" + udto1.getUserName());
         ResponseBody body = response.getBody();
         System.out.println(body.prettyPrint());
 
         response
                 .then()
                 .assertThat()
-                .body("userName",equalTo("Oscar"));
+                .body("userName", equalTo("Oscar"));
     }
 
 
@@ -138,7 +135,7 @@ public class UserResourceTest {
                 .get("/users/all")
                 .then()
                 .extract().body().jsonPath().getList("", UserDTO.class);
-                 assertThat(usersDTOS,containsInAnyOrder(udto1,udto2));
+        assertThat(usersDTOS, containsInAnyOrder(udto1, udto2));
     }
 
 
@@ -146,25 +143,24 @@ public class UserResourceTest {
     void getUserByUserName() {
         given()
                 .contentType(ContentType.JSON)
-                .get("/users/"+ udto1.getUserName())
+                .get("/users/" + udto1.getUserName())
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("userName", equalTo(udto1.getUserName()));
-           // ADD ROLES    // .body("ro", equalTo(personDTO1.getEmail()))
-
+                .body("userName", equalTo(udto1.getUserName()))
+                .body("roleList", containsInAnyOrder(udto1.getRoleList().get(0)));
     }
 
     @Test
     void createUser() {
-       User user = new User();
-       user.setUserName("Chris");
-       user.setUserPass("PW");
-       Role role = new Role("user");
-       user.addRole(role);
+        User user = new User();
+        user.setUserName("Chris");
+        user.setUserPass("PW");
+        Role role = new Role("user");
+        user.addRole(role);
 
-       UserDTO udto = new UserDTO(user);
-       String requestBody = GSON.toJson(udto);
+        UserDTO udto = new UserDTO(user);
+        String requestBody = GSON.toJson(udto);
 
         given()
                 .header("Content-type", ContentType.JSON)
@@ -175,11 +171,11 @@ public class UserResourceTest {
                 .then()
                 .assertThat()
                 .statusCode(200)
-                .body("userName", equalTo("Chris"));
-               // ROLE //.body("email", equalTo("michael@mail.com"))
+                .body("userName", equalTo("Chris"))
+                .body("roleList", containsInAnyOrder("user"));
+
 
     }
-
 
     @Test
     void deleteUser() {
