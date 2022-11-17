@@ -7,6 +7,7 @@ import entities.User;
 import errorhandling.API_Exception;
 import errorhandling.NotFoundException;
 import org.junit.jupiter.api.*;
+import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
@@ -108,7 +109,6 @@ public class UserFacadeTest {
     void CantFindUserToDelete() {
         assertThrows(API_Exception.class, () -> facade.deleteUser("HEJSA"));
     }
-
 
 }
 

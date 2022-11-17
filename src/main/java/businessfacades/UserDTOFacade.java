@@ -11,6 +11,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class UserDTOFacade {
+
     private static UserDTOFacade instance;
     private static UserFacade userFacade;
 

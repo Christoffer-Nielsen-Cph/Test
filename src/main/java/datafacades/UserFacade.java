@@ -2,15 +2,12 @@ package datafacades;
 
 import entities.Role;
 import entities.User;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
-
 import errorhandling.API_Exception;
 import errorhandling.NotFoundException;
 import security.errorhandling.AuthenticationException;
-
 import java.util.List;
 
 /**
@@ -73,15 +70,12 @@ public class UserFacade {
         EntityManager em = getEntityManager();
         try {
             em.getTransaction().begin();
-            User update = em.find(User.class,user.getUserName());
-            update.setUserName(user.getUserName());
-            update.setUserPass(user.getUserPass());
-            update.addRole(new Role("user"));
-            em.persist(update);
+            user.addRole(new Role("user"));
+            User u = em.merge(user);
             em.getTransaction().commit();
-            return user;
+            return u;
         } catch (Exception e) {
-            throw new API_Exception("Can't find a user with the username: "+user.getUserName());
+            throw new API_Exception("Can't find a user with the username: "+user.getUserName(),400,e);
         } finally {
             em.close();
         }
@@ -116,7 +110,7 @@ public class UserFacade {
             em.getTransaction().commit();
         } catch (Exception e) {
             if (user == null) {
-                throw new API_Exception("Can't find a user with the username: " + userName);
+                throw new API_Exception("Can't find a user with the username: " + userName,400,e);
             }
         } finally {
             em.close();
