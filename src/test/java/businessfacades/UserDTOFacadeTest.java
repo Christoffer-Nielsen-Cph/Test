@@ -1,6 +1,5 @@
-package datafacades;
+package businessfacades;
 
-import datafacades.UserFacade;
 import dtos.UserDTO;
 import entities.Role;
 import entities.User;
@@ -8,26 +7,25 @@ import errorhandling.API_Exception;
 import errorhandling.NotFoundException;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserFacadeTest {
+public class UserDTOFacadeTest {
+
     private static EntityManagerFactory emf;
-    private static UserFacade facade;
+    private static UserDTOFacade facade;
 
-    User u1, u2;
+    UserDTO udto1, udto2;
 
-    public UserFacadeTest() {
+    public UserDTOFacadeTest() {
     }
 
     @BeforeAll
     public static void setUpClass() {
         emf = EMF_Creator.createEntityManagerFactoryForTest();
-        facade = UserFacade.getUserFacade(emf);
+        facade = UserDTOFacade.getInstance(emf);
     }
 
     @AfterAll
@@ -39,8 +37,8 @@ public class UserFacadeTest {
     public void setUp() {
         EntityManager em = emf.createEntityManager();
         Role userRole = new Role("user");
-        u1 = new User();
-        u2 = new User();
+        User u1 = new User();
+        User u2 = new User();
         u1.setUserName("Oscar");
         u1.setUserPass("test");
         u1.addRole(userRole);
@@ -56,6 +54,8 @@ public class UserFacadeTest {
             em.persist(u2);
             em.getTransaction().commit();
         } finally {
+            udto1 = new UserDTO(u1);
+            udto2 = new UserDTO(u2);
             em.close();
         }
     }
@@ -66,42 +66,45 @@ public class UserFacadeTest {
     }
 
     @Test
-    void createUserTest() throws NotFoundException, API_Exception {
-        User user = new User("Chris", "PW");
-        facade.createUser(user);
-        assertNotNull(user.getUserName());
+    void createUserDTOTest() throws NotFoundException, API_Exception {
+        UserDTO userDTO = new UserDTO(new User("Chris", "PW"));
+        facade.createUser(userDTO);
+        assertNotNull(userDTO.getUserName());
         int actualSize = facade.getAllUsers().size();
         assertEquals(3, actualSize);
     }
 
     @Test
-    void createNoDuplicateUsers() throws API_Exception {
-        User user = new User("Oscar", "PW");
-        assertThrows(API_Exception.class, () -> facade.createUser(user));
+    void createNoDuplicateUserDTOs() throws API_Exception {
+        UserDTO userDTO = new UserDTO(new User("Oscar", "PW"));
+        assertThrows(API_Exception.class, () -> facade.createUser(userDTO));
     }
 
     @Test
-    void findUserByUsername() throws NotFoundException {
-        User user = facade.getUserByUserName(u1.getUserName());
-        assertEquals(u1, user);
+    void findUserDTOByUsername() throws NotFoundException {
+        UserDTO userDTO = facade.getUserByUserName(udto1.getUserName());
+        assertEquals(udto1, userDTO);
     }
 
     @Test
-    void findAllUsers() throws NotFoundException {
-        List<User> actual = facade.getAllUsers();
+    void findAllUserDTOs() throws NotFoundException {
+        List<UserDTO> actual = facade.getAllUsers();
         int expected = 2;
         assertEquals(expected, actual.size());
     }
 
     @Test
-    void deleteUser() throws API_Exception, NotFoundException {
+    void deleteUserDTO() throws API_Exception, NotFoundException {
         facade.deleteUser("Oscar");
         int actualSize = facade.getAllUsers().size();
         assertEquals(1, actualSize);
     }
 
     @Test
-    void CantFindUserToDelete() {
+    void CantFindUserDTOToDelete() {
         assertThrows(API_Exception.class, () -> facade.deleteUser("HEJSA"));
     }
+
 }
+
+
