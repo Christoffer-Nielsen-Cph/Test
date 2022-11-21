@@ -33,13 +33,13 @@ public class UserResource {
     @GET
     @Path("/{userName}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getById(@PathParam("userName") String userName) throws EntityNotFoundException, NotFoundException {
+    public Response getById(@PathParam("userName") String userName) throws API_Exception {
         return Response.ok().entity(GSON.toJson(facade.getUserByUserName(userName))).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
     }
 
     @GET
     @Path("/all")
-    public Response getAllUsers() throws NotFoundException {
+    public Response getAllUsers() throws API_Exception {
         return Response.ok().entity(GSON.toJson(facade.getAllUsers())).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
     }
 

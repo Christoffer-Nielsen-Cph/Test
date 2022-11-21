@@ -81,13 +81,13 @@ public class UserFacadeTest {
     }
 
     @Test
-    void findUserByUsername() throws NotFoundException {
+    void findUserByUsername() throws API_Exception {
         User user = facade.getUserByUserName(u1.getUserName());
         assertEquals(u1, user);
     }
 
     @Test
-    void findAllUsers() throws NotFoundException {
+    void findAllUsers() throws API_Exception {
         List<User> actual = facade.getAllUsers();
         int expected = 2;
         assertEquals(expected, actual.size());

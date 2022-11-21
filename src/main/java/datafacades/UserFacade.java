@@ -81,23 +81,25 @@ public class UserFacade {
         }
     }
 
-    public User getUserByUserName(String userName) throws NotFoundException {
+    public User getUserByUserName(String userName) throws API_Exception {
         EntityManager em = getEntityManager();
-        User u = em.find(User.class, userName);
-        if (u == null) {
-            throw new NotFoundException("Can't find a user with the username: " + userName);
+        try{
+            User u = em.find(User.class, userName);
+            return u;
+        } catch (Exception e){
+            throw new API_Exception("Can't find a user with the username: " + userName,404,e);
         }
-        return u;
 
     }
 
-    public List<User> getAllUsers() throws NotFoundException {
+    public List<User> getAllUsers() throws API_Exception {
         EntityManager em = getEntityManager();
-        TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
-        if (query == null) {
-            throw new NotFoundException("Can't find any users in the system");
+        try {
+            TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
+            return query.getResultList();
+        } catch (Exception e){
+            throw new API_Exception("Can't find any users in the system",404,e);
         }
-        return query.getResultList();
     }
 
     public User deleteUser(String userName) throws API_Exception {

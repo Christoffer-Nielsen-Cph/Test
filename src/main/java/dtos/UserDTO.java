@@ -10,11 +10,15 @@ import java.util.Objects;
 public class UserDTO {
 
     private String userName;
+
+    private String userEmail;
     private String userPass;
+
     private List<String> roleList;
 
     public UserDTO(User user){
         this.userName = user.getUserName();
+        this.userEmail = user.getUserEmail();
         this.userPass = user.getUserPass();
         this.roleList = user.getRolesAsStrings();
     }
@@ -23,6 +27,7 @@ public class UserDTO {
         if(this.userName != null){
             user.setUserName(this.userName);
         }
+        user.setUserEmail(this.userEmail);
         user.setUserPass(this.userPass);
         user.getRolesAsStrings();
         return user;
@@ -56,6 +61,16 @@ public class UserDTO {
     public void setRoleList(List<String> roleList) {
         this.roleList = roleList;
     }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {

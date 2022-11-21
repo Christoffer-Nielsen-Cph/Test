@@ -25,8 +25,14 @@ public class User implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
+    @Column(name = "user_email")
+    private String userEmail;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "user_pass")
     private String userPass;
+
     @JoinTable(name = "user_roles", joinColumns = {
             @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
             @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
@@ -45,6 +51,12 @@ public class User implements Serializable {
         this.userName = userName;
         this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
         this.roleList = roleList;
+    }
+
+    public User(String userName, String userEmail, String userPass) {
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
     }
 
     public List<String> getRolesAsStrings() {
@@ -84,6 +96,16 @@ public class User implements Serializable {
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
     }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+
     public void addRole(Role userRole) {
         roleList.add(userRole);
     }

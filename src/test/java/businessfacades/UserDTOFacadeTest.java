@@ -81,13 +81,13 @@ public class UserDTOFacadeTest {
     }
 
     @Test
-    void findUserDTOByUsername() throws NotFoundException {
+    void findUserDTOByUsername() throws API_Exception {
         UserDTO userDTO = facade.getUserByUserName(udto1.getUserName());
         assertEquals(udto1, userDTO);
     }
 
     @Test
-    void findAllUserDTOs() throws NotFoundException {
+    void findAllUserDTOs() throws API_Exception {
         List<UserDTO> actual = facade.getAllUsers();
         int expected = 2;
         assertEquals(expected, actual.size());

@@ -34,10 +34,10 @@ public class UserDTOFacade {
     public UserDTO updateUser(UserDTO userDTO) throws API_Exception {
         return new UserDTO(userFacade.updateUser(userDTO.getEntity()));
     }
-    public UserDTO getUserByUserName(String userName) throws NotFoundException {
+    public UserDTO getUserByUserName(String userName) throws API_Exception {
         return new UserDTO(userFacade.getUserByUserName(userName));
     }
-    public List<UserDTO> getAllUsers() throws NotFoundException {
+    public List<UserDTO> getAllUsers() throws API_Exception {
         return UserDTO.getUserDTOs(userFacade.getAllUsers());
     }
     public UserDTO deleteUser(String userName) throws API_Exception {

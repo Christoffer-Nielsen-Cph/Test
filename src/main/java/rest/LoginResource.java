@@ -4,6 +4,7 @@ import businessfacades.UserDTOFacade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import entities.User;
+import errorhandling.API_Exception;
 import utils.EMF_Creator;
 
 import javax.annotation.security.RolesAllowed;
@@ -41,14 +42,17 @@ public class LoginResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("all")
-    public String allUsers() {
+    public String allUsers() throws API_Exception {
 
         EntityManager em = EMF.createEntityManager();
         try {
             TypedQuery<User> query = em.createQuery ("select u from User u",entities.User.class);
             List<User> users = query.getResultList();
             return "[" + users.size() + "]";
-        } finally {
+        } catch (Exception e){
+            throw new API_Exception("Can't find any users in the system",404,e);
+        }
+            finally {
             em.close();
         }
     }
